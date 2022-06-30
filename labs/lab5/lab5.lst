@@ -1,0 +1,76 @@
+     1                                      global _Z8printASMPci
+     2                                      global _Z10numwordASMPci
+     3                                  
+     4                                  section .text
+     5                                  
+     6                                     _Z10numwordASMPci:
+     7                                              ; пролог
+     8 00000000 55                              push    RBP
+     9 00000001 4889E5                          mov     RBP, RSP
+    10 00000004 51                              push    RCX
+    11                                      ;сохранение переданных параметров по порядку в стек
+    12 00000005 57                              push    RDI ;строка
+    13 00000006 56                              push    RSI ;длина строки
+    14 00000007 4889F1                          mov RCX, RSI
+    15 0000000A B020                            mov AL, " "
+    16 0000000C BB00000000                      mov RBX, 0
+    17                                      
+    18                                      cycle:
+    19                                  
+    20 00000011 AE                              scasb
+    21 00000012 7503                            jnz no
+    22 00000014 48FFC3                          inc RBX
+    23                                  
+    24                                      no:
+    25                                  
+    26 00000017 E2F8                            loop cycle
+    27                                  
+    28 00000019 48FFC3                      inc RBX
+    29 0000001C 4889D8                      mov RAX, RBX
+    30                                  
+    31                                      ExitBlock1:
+    32 0000001F 5E                              pop    RSI
+    33 00000020 5F                              pop    RDI
+    34 00000021 59                              pop    RCX
+    35 00000022 4889E5                          mov    RBP, RSP
+    36 00000025 5D                              pop    RBP
+    37 00000026 C3                              ret
+    38                                  
+    39                                      _Z8printASMPci:
+    40                                          ; пролог
+    41 00000027 55                              push    RBP
+    42 00000028 4889E5                          mov     RBP, RSP
+    43 0000002B 51                              push    RCX
+    44 0000002C 50                              push    RAX
+    45                                      ;сохранение переданных параметров по порядку в стек
+    46 0000002D 57                              push    RDI
+    47 0000002E 56                              push    RSI
+    48                                  
+    49                                      ;вывод
+    50 0000002F 4889F0                          mov RAX, RSI ; size of string
+    51 00000032 4889FE                          mov     RSI, RDI
+    52 00000035 4889C2                          mov     RDX, RAX
+    53 00000038 B801000000                      mov     RAX, 1
+    54 0000003D BF01000000                      mov     RDI, 1
+    55 00000042 0F05                            syscall
+    56                                  
+    57                                      ; print '\n'
+    58 00000044 B80A000000                      mov RAX, 10
+    59 00000049 50                              push RAX
+    60                                  
+    61 0000004A 488D3424                        lea     RSI, [RSP]
+    62 0000004E BA01000000                      mov     RDX, 1
+    63 00000053 B801000000                      mov     RAX, 1
+    64 00000058 BF01000000                      mov     RDI, 1
+    65 0000005D 0F05                            syscall
+    66                                  
+    67 0000005F 58                              pop RAX
+    68                                  
+    69                                      ExitBlock2:
+    70 00000060 5E                              pop    RSI
+    71 00000061 5F                              pop    RDI
+    72 00000062 58                              pop    RAX
+    73 00000063 59                              pop    RCX
+    74 00000064 4889E5                          mov    RBP, RSP
+    75 00000067 5D                              pop    RBP
+    76 00000068 C3                              ret
